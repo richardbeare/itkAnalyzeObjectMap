@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 2.6)
+
+
+PROJECT( ANALYZE_OBJECT_MAP )
+
+#include some macros from another file...
+INCLUDE(IJMacros.txt)
+
+#  FIND ITK
+SET(Required_Packages
+  ITK
+)
+FOREACH(Package ${Required_Packages})
+  LOADPACKAGE(${Package})
+ENDFOREACH(Package)
+
+
+SET (LIBRARY_OUTPUT_PATH ${ANALYZE_OBJECT_MAP_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries." FORCE)
+SET (EXECUTABLE_OUTPUT_PATH ${ANALYZE_OBJECT_MAP_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables." FORCE)
+
+# Add the testing directories
+OPTION(ANALYZE_OBJECT_MAP_BUILD_TESTING "Test" ON)
+IF(ANALYZE_OBJECT_MAP_BUILD_TESTING)
+  ENABLE_TESTING()
+ENDIF(ANALYZE_OBJECT_MAP_BUILD_TESTING)
+
+SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
+
+SUBDIRS(Source)
+
+# Add the testing directories
+IF(ANALYZE_OBJECT_MAP_BUILD_TESTING)
+   SUBDIRS(Test)
+ENDIF(ANALYZE_OBJECT_MAP_BUILD_TESTING)
+
+# Add the examples directories
+OPTION(ANALYZE_OBJECT_MAP_BUILD_EXAMPLES "Examples" ON)
+IF(ANALYZE_OBJECT_MAP_BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF(ANALYZE_OBJECT_MAP_BUILD_EXAMPLES)
