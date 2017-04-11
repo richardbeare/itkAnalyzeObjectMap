@@ -110,7 +110,7 @@ template <class TImage = itk::Image<unsigned char, 4>, class TRGBImage = itk::Im
        *After that the object entry from the original object map will be copied over to the 
        *new object map's vector of object entries.
        */
-      typename itk::AnalyzeObjectMap<TImage>::Pointer PickOneEntry(const int numberOfEntry = -1);
+  typename itk::AnalyzeObjectMap<TImage, TRGBImage>::Pointer PickOneEntry(const int numberOfEntry = -1);
 
       /**
        * \brief ObjectMapToRGBImage
@@ -123,6 +123,7 @@ template <class TImage = itk::Image<unsigned char, 4>, class TRGBImage = itk::Im
        */
       typename TRGBImage::Pointer ObjectMapToRGBImage();
 
+  typename TImage::Pointer ObjectMapToLabelImage();
       /**
        * \brief AddObjectEntryBasedOnImagePixel
        *

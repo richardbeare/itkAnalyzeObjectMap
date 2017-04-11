@@ -14,6 +14,9 @@ FOREACH(Package ${Required_Packages})
   LOADPACKAGE(${Package})
 ENDFOREACH(Package)
 
+SET(Libraries
+${ITK_LIBRARIES}
+)
 
 SET (LIBRARY_OUTPUT_PATH ${ANALYZE_OBJECT_MAP_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries." FORCE)
 SET (EXECUTABLE_OUTPUT_PATH ${ANALYZE_OBJECT_MAP_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables." FORCE)

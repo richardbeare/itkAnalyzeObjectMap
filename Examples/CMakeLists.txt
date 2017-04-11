@@ -17,7 +17,9 @@ ENDFOREACH(Package)
 #    INCLUDE( ${USE_VTK_FILE} )
 #ENDIF( VTK_FOUND )
 SET(Libraries
-${ITK_LIBRARIES}
+  ${ITK_LIBRARIES}
+  AnalyzeObjectMapIO
+  AnalyzeObjectMap
 )
 
 
@@ -30,12 +32,14 @@ SET(TESTING_OUTPUT_DIR ${AnalyzeObjectMapExamples_BINARY_DIR}/Temporary)
 INCLUDE_DIRECTORIES( ${AnalyzeObjectMapExamples_SOURCE_DIR} )
 
 ADD_EXECUTABLE( CreatingObjects CreatingObjects.cxx )
-TARGET_LINK_LIBRARIES( CreatingObjects ITKIO AnalyzeObjectMapIO AnalyzeObjectMap)
+TARGET_LINK_LIBRARIES( CreatingObjects ${Libraries} )
 
 ADD_EXECUTABLE( DisplayingObjectMaps DisplayingObjectMaps.cxx )
-TARGET_LINK_LIBRARIES( DisplayingObjectMaps ITKIO AnalyzeObjectMapIO AnalyzeObjectMap) #vtkRendering vtkImaging vtkIO vtkCommon)
+TARGET_LINK_LIBRARIES( DisplayingObjectMaps ${Libraries} ) #vtkRendering vtkImaging vtkIO vtkCommon)
 
 ADD_EXECUTABLE( PickOneObjectEntry PickOneObjectEntry.cxx )
-TARGET_LINK_LIBRARIES( PickOneObjectEntry ITKIO AnalyzeObjectMapIO AnalyzeObjectMap)
+TARGET_LINK_LIBRARIES( PickOneObjectEntry ${Libraries} )
 
+ADD_EXECUTABLE( ConvertObjectMaps ConvertObjectMaps.cxx )
+TARGET_LINK_LIBRARIES( ConvertObjectMaps ${Libraries} )
 

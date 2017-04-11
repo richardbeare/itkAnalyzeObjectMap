@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 
 PROJECT(AnalyzeObjectMapTest)
-
-FIND_PACKAGE(ITK REQUIRED)
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ENDIF(ITK_FOUND)
+FOREACH(Package ${Required_Packages})
+  LOADPACKAGE(${Package})
+ENDFOREACH(Package)
+SET(Libraries
+${ITK_LIBRARIES}
+)
 
 INCLUDE_DIRECTORIES(${AnalyzeObjectMap_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${AnalyzeObjectMapIO_SOURCE_DIR})
@@ -17,7 +18,7 @@ SET(TESTING_OUTPUT_DIR ${ANALYZE_OBJECT_MAP_BINARY_DIR}/Temporary)
 INCLUDE_DIRECTORIES( ${AnalyzeObjectMapTest_SOURCE_DIR} )
 
 ADD_EXECUTABLE( AnalyzeObjectMapTest AnalyzeObjectMapTest.cxx )
-TARGET_LINK_LIBRARIES( AnalyzeObjectMapTest ITKIO  AnalyzeObjectMapIO AnalyzeObjectMap)
+TARGET_LINK_LIBRARIES( AnalyzeObjectMapTest ${Libraries}  AnalyzeObjectMapIO AnalyzeObjectMap)
 
 ADD_TEST( ImageIOStreamingAnalyzeObjectLabelMapTest01
    ${EXECUTABLE_OUTPUT_PATH}/AnalyzeObjectMapTest

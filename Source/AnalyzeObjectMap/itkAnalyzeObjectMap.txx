@@ -67,9 +67,9 @@ template<class TImage, class TRGBImage>
   //and change the values so that there is either 0 or 1.  1 corresponds to the entry
   //the user specified and 0 is the background.
 template<class TImage, class TRGBImage>
-  typename itk::AnalyzeObjectMap<TImage>::Pointer AnalyzeObjectMap<TImage, TRGBImage>::PickOneEntry(const int numberOfEntry)
+typename itk::AnalyzeObjectMap<TImage,TRGBImage>::Pointer AnalyzeObjectMap<TImage, TRGBImage>::PickOneEntry(const int numberOfEntry)
   {
-    typename itk::AnalyzeObjectMap<TImage>::Pointer ObjectMapNew = itk::AnalyzeObjectMap<TImage>::New();
+    typename itk::AnalyzeObjectMap<TImage, TRGBImage>::Pointer ObjectMapNew = itk::AnalyzeObjectMap<TImage, TRGBImage>::New();
     ObjectMapNew->SetRegions(this->GetLargestPossibleRegion());
     ObjectMapNew->Allocate();
     ObjectMapNew->AddAnalyzeObjectEntry(this->GetObjectEntry(numberOfEntry)->GetName());
@@ -103,7 +103,7 @@ template<class TImage, class TRGBImage>
 
     /*std::ofstream myfile;
     myfile.open("RGBImageVoxels2.txt");*/
-    for(ObjectIterator.Begin(), RGBIterator.Begin(); !ObjectIterator.IsAtEnd(); ++ObjectIterator, ++RGBIterator)
+    for(ObjectIterator.GoToBegin(), RGBIterator.GoToBegin(); !ObjectIterator.IsAtEnd(); ++ObjectIterator, ++RGBIterator)
     {
     typename itk::ImageRegionIterator<TRGBImage>::PixelType setColors;
 //      typename RGBImage->ImageType setColors;
@@ -116,6 +116,26 @@ template<class TImage, class TRGBImage>
     }
     //myfile.close();
     return RGBImage;
+}
+
+template<class TImage, class TRGBImage>
+  typename TImage::Pointer AnalyzeObjectMap<TImage, TRGBImage>::ObjectMapToLabelImage()
+  {
+  typename TImage::Pointer LabImage = TImage::New();
+    LabImage->SetRegions(this->GetLargestPossibleRegion());
+    LabImage->Allocate();
+    LabImage->FillBuffer(0);
+    itk::ImageRegionIterator<TImage> LabIterator(LabImage, this->GetLargestPossibleRegion());
+    itk::ImageRegionIterator<ImageType> ObjectIterator(this, this->GetLargestPossibleRegion());
+
+    for(ObjectIterator.GoToBegin(), LabIterator.GoToBegin(); !ObjectIterator.IsAtEnd(); ++ObjectIterator, ++LabIterator)
+    {
+    if (ObjectIterator.Get())
+      {
+      LabIterator.Set(ObjectIterator.Get());
+      }
+    }
+    return LabImage;
 }
 
   //This function will take in an unsigned char of dimension size 3 and go through it and figure out the value the user wants picked out.  The user will also have to
@@ -141,7 +161,7 @@ template<class TImage, class TRGBImage>
     this->m_AnaylzeObjectEntryArray[i]->SetEndRed(Red);
     this->m_AnaylzeObjectEntryArray[i]->SetEndGreen(Green);
     this->m_AnaylzeObjectEntryArray[i]->SetEndBlue(Blue);
-    for(indexImage.Begin(), indexObjectMap.Begin();!indexImage.IsAtEnd() && !indexObjectMap.IsAtEnd(); ++indexImage, ++indexObjectMap)
+    for(indexImage.GoToBegin(), indexObjectMap.GoToBegin();!indexImage.IsAtEnd() && !indexObjectMap.IsAtEnd(); ++indexImage, ++indexObjectMap)
     {
     if(indexImage.Get() == value)
       {
@@ -179,7 +199,7 @@ template<class TImage, class TRGBImage>
   this->SetNumberOfObjects(this->GetNumberOfObjects()-1);
   //this->m_AnaylzeObjectEntryArray.resize(this->GetNumberOfObjects());
   itk::ImageRegionIterator<ImageType > indexIt(this,this->GetLargestPossibleRegion());
-    for(indexIt.Begin();!indexIt.IsAtEnd(); ++indexIt)
+    for(indexIt.GoToBegin();!indexIt.IsAtEnd(); ++indexIt)
     {
     if(indexIt.Get() == i)
       {
